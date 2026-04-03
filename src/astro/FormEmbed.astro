@@ -1,0 +1,210 @@
+---
+interface Props {
+	node: { formId: string };
+}
+
+interface FormFieldOption {
+	label: string;
+	value: string;
+}
+
+interface FormField {
+	id: string;
+	type: "text" | "email" | "textarea" | "select" | "checkbox";
+	label: string;
+	name: string;
+	placeholder?: string;
+	helpText?: string;
+	required: boolean;
+	options?: FormFieldOption[];
+}
+
+interface RenderableForm {
+	id: string;
+	name: string;
+	slug: string;
+	status: "active" | "paused";
+	pages: Array<{
+		title?: string;
+		fields: FormField[];
+	}>;
+	settings: {
+		confirmationMessage: string;
+		redirectUrl?: string;
+		submitLabel: string;
+	};
+}
+
+const { node } = Astro.props;
+
+const emdash = (Astro.locals as Record<string, unknown>).emdash as
+	| {
+			handlePluginApiRoute?: (
+				pluginId: string,
+				method: string,
+				path: string,
+				request: Request,
+			) => Promise<{ success: boolean; data?: unknown }>;
+	  }
+	| undefined;
+
+async function loadRenderableForm(formId: string): Promise<RenderableForm | null> {
+	if (!emdash?.handlePluginApiRoute) return null;
+
+	const request = new Request(new URL("/_emdash/api/plugins/masonjames-contact-forms/forms/list", Astro.url), {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"X-EmDash-Request": "1",
+		},
+		body: JSON.stringify({ id: formId, mode: "render" }),
+	});
+
+	const result = await emdash.handlePluginApiRoute(
+		"masonjames-contact-forms",
+		"POST",
+		"/forms/list",
+		request,
+	);
+
+	if (!result.success || !result.data || typeof result.data !== "object" || !("items" in result.data)) {
+		return null;
+	}
+
+	const items = result.data.items;
+	if (!Array.isArray(items) || items.length === 0) return null;
+	return items[0] as RenderableForm;
+}
+
+const form = await loadRenderableForm(node.formId);
+const submitUrl = "/_emdash/api/plugins/masonjames-contact-forms/submit";
+
+function fieldId(formId: string, fieldName: string): string {
+	return `mjcf-${formId}-${fieldName}`;
+}
+---
+
+{!form || form.status !== "active" ? (
+	<div class="mjcf-unavailable" role="status" aria-live="polite">
+		This form is currently unavailable.
+	</div>
+) : (
+	<form
+		class="mjcf-form"
+		method="POST"
+		action={submitUrl}
+		data-mjcf-form
+		data-submit-label={form.settings.submitLabel || "Submit"}
+	>
+		<div class="mjcf-honeypot" aria-hidden="true">
+			<label for={`mjcf-${form.id}-_hp`}>Leave this field empty</label>
+			<input
+				id={`mjcf-${form.id}-_hp`}
+				type="text"
+				name="_hp"
+				tabindex="-1"
+				autocomplete="off"
+			/>
+		</div>
+
+		<input type="hidden" name="formId" value={form.id} />
+
+		{form.pages[0]?.fields.map((field) => {
+			const inputId = fieldId(form.id, field.name);
+			const helpId = field.helpText ? `${inputId}-help` : undefined;
+			const errorId = `${inputId}-error`;
+			const describedBy = [helpId, errorId].filter(Boolean).join(" ") || undefined;
+
+			return (
+				<div class={`mjcf-field mjcf-field--${field.type}`}>
+					{field.type === "checkbox" ? (
+						<label class="mjcf-checkbox-label" for={inputId}>
+							<input
+								id={inputId}
+								type="checkbox"
+								name={field.name}
+								value="true"
+								aria-describedby={describedBy}
+								required={field.required}
+							/>
+							<span>
+								{field.label}
+								{field.required && <span class="mjcf-required" aria-hidden="true"> *</span>}
+							</span>
+						</label>
+					) : (
+						<label class="mjcf-label" for={inputId}>
+							{field.label}
+							{field.required && <span class="mjcf-required" aria-hidden="true"> *</span>}
+						</label>
+					)}
+
+					{field.type === "text" || field.type === "email" ? (
+						<input
+							id={inputId}
+							class="mjcf-input"
+							type={field.type}
+							name={field.name}
+							placeholder={field.placeholder}
+							required={field.required}
+							aria-describedby={describedBy}
+						/>
+					) : null}
+
+					{field.type === "textarea" ? (
+						<textarea
+							id={inputId}
+							class="mjcf-input mjcf-textarea"
+							name={field.name}
+							placeholder={field.placeholder}
+							required={field.required}
+							aria-describedby={describedBy}
+						/>
+					) : null}
+
+					{field.type === "select" ? (
+						<select
+							id={inputId}
+							class="mjcf-input"
+							name={field.name}
+							required={field.required}
+							aria-describedby={describedBy}
+						>
+							<option value="">Select an option</option>
+							{(field.options ?? []).map((option) => (
+								<option value={option.value}>{option.label}</option>
+							))}
+						</select>
+					) : null}
+
+					{field.helpText && (
+						<p class="mjcf-help" id={helpId}>
+							{field.helpText}
+						</p>
+					)}
+
+					<p class="mjcf-error" id={errorId} data-mjcf-error-for={field.name} aria-live="polite" />
+				</div>
+			);
+		})}
+
+		<div class="mjcf-actions">
+			<button
+				type="submit"
+				class="mjcf-submit"
+				data-mjcf-submit
+				data-loading-label="Sending..."
+			>
+				{form.settings.submitLabel || "Submit"}
+			</button>
+		</div>
+
+		<div class="mjcf-status" data-mjcf-status aria-live="polite" />
+	</form>
+)}
+
+<script>
+	import { initContactForms } from "@masonjames/emdash-contact-forms/client";
+
+	initContactForms();
+</script>

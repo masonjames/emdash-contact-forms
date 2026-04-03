@@ -1,0 +1,65 @@
+{
+  "name": "@masonjames/emdash-contact-forms",
+  "version": "0.1.0",
+  "description": "Production-ready contact forms plugin for EmDash CMS",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./plugin": "./src/plugin.ts",
+    "./admin": "./src/admin.tsx",
+    "./astro": "./src/astro/index.ts",
+    "./client": "./src/client/index.ts",
+    "./styles": "./src/styles/forms.css"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "emdash",
+    "astro",
+    "cms",
+    "plugin",
+    "forms",
+    "contact-form",
+    "submissions"
+  ],
+  "author": "Mason James",
+  "license": "MIT",
+  "peerDependencies": {
+    "astro": ">=6.0.0-beta.0",
+    "emdash": ">=0.1.0",
+    "react": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "astro": "^6.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.3"
+  },
+  "dependencies": {
+    "ulidx": "^2.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/masonjames/emdash-contact-forms.git"
+  },
+  "homepage": "https://github.com/masonjames/emdash-contact-forms",
+  "bugs": {
+    "url": "https://github.com/masonjames/emdash-contact-forms/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
