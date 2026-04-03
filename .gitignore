@@ -1,5 +1,8 @@
 node_modules/
 *.tgz
+*.tar.gz
+.emdash-bundle-tmp/
+dist/
 npm-debug.log*
 .DS_Store
 coverage/

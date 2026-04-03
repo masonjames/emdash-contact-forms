@@ -103,3 +103,11 @@ The built-in rate limiter is best-effort and intentionally lightweight. In produ
 ## Marketplace
 
 This repository ships the native/trusted Release A package. The Marketplace / `emdash plugin publish` adaptation is a separate Release B track documented in `06-MARKETPLACE-ADAPTATION-PLAN.md`.
+
+
+## Release B marketplace split
+
+Release B work now lives in `packages/contact-forms-core` as `@masonjames/emdash-contact-forms-core`.
+
+- the repo root package remains the native/trusted companion for Astro + Portable Text
+- the new core package is the marketplace-target standard/sandbox package

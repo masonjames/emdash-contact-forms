@@ -1,0 +1,58 @@
+{
+  "name": "@masonjames/emdash-contact-forms-core",
+  "version": "0.1.0",
+  "description": "Marketplace-compatible core plugin for EmDash contact forms",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./sandbox": "./src/sandbox-entry.ts"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "validate": "emdash plugin validate --dir .",
+    "bundle": "emdash plugin bundle --dir .",
+    "publish": "emdash plugin publish --build --dir ."
+  },
+  "keywords": [
+    "emdash",
+    "astro",
+    "cms",
+    "plugin",
+    "forms",
+    "marketplace"
+  ],
+  "author": "Mason James",
+  "license": "MIT",
+  "peerDependencies": {
+    "astro": ">=6.0.0-beta.0",
+    "emdash": ">=0.1.0"
+  },
+  "devDependencies": {
+    "astro": "^6.0.0",
+    "emdash": "^0.1.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.3"
+  },
+  "dependencies": {
+    "@emdash-cms/blocks": "^0.1.0",
+    "ulidx": "^2.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/masonjames/emdash-contact-forms.git",
+    "directory": "packages/contact-forms-core"
+  },
+  "homepage": "https://github.com/masonjames/emdash-contact-forms/tree/main/packages/contact-forms-core",
+  "bugs": {
+    "url": "https://github.com/masonjames/emdash-contact-forms/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

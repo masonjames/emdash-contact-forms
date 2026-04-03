@@ -119,7 +119,7 @@ Do not run this until Release B work starts.
 - [ ] no `portableTextBlocks` in the marketplace-target package
 - [ ] `src/sandbox-entry.ts` exists
 - [ ] package exports include `"./sandbox"`
-- [ ] `emdash plugin validate` passes
-- [ ] `emdash plugin bundle` passes
+- [ ] `emdash plugin validate --dir packages/contact-forms-core` passes
+- [ ] `emdash plugin bundle --dir packages/contact-forms-core` passes
 - [ ] icon and screenshots meet bundle limits
-- [ ] `emdash plugin publish --build` is ready to run
+- [ ] `emdash plugin publish --build --dir packages/contact-forms-core` is ready to run

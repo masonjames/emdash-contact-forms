@@ -77,3 +77,11 @@ Those are native/trusted plugin surfaces. EmDash’s marketplace bundle flow is 
 - Keep the public surface to **one write route**: `submit`.
 - Keep plugin capabilities to **`email:send` only** in Release A.
 - Build from the existing EmDash `forms` plugin patterns, but treat that code as a **reference implementation**, not the scope definition.
+
+
+## Release B implementation choice
+
+The split-package strategy is now active in-repo:
+
+- native companion package: repo root (`@masonjames/emdash-contact-forms`)
+- marketplace core package: `packages/contact-forms-core` (`@masonjames/emdash-contact-forms-core`)

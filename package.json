@@ -21,7 +21,12 @@
   "scripts": {
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "core:typecheck": "npm run --workspace @masonjames/emdash-contact-forms-core typecheck",
+    "core:test": "npm run --workspace @masonjames/emdash-contact-forms-core test",
+    "core:validate": "npm run --workspace @masonjames/emdash-contact-forms-core validate",
+    "core:bundle": "npm run --workspace @masonjames/emdash-contact-forms-core bundle",
+    "core:publish": "npm run --workspace @masonjames/emdash-contact-forms-core publish"
   },
   "keywords": [
     "emdash",
@@ -45,6 +50,7 @@
     "astro": "^6.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "tsdown": "^0.21.7",
     "typescript": "^5.9.3",
     "vitest": "^4.0.3"
   },
@@ -61,5 +67,8 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

@@ -186,3 +186,11 @@ Release B is successful when:
 - admin UI works through Block Kit
 - the public submit route still matches the hardened Release A behavior
 - scope remains intentionally smaller than the original baseline
+
+
+# 8. Chosen implementation path
+
+- native companion stays at repo root as `@masonjames/emdash-contact-forms`
+- marketplace-target package starts at `packages/contact-forms-core` as `@masonjames/emdash-contact-forms-core`
+- plugin id for the new core package is `masonjames-contact-forms-core`
+- first slice scope is standard descriptor + sandbox runtime + minimal Block Kit admin + hardened submit path parity
